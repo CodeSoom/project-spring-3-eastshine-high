@@ -21,8 +21,13 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+    testRuntimeOnly'com.h2database:h2'
+
+    // AssertJ
+    testImplementation 'org.assertj:assertj-core:3.18.1'
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1-jre'
@@ -30,6 +35,9 @@ dependencies {
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    //DozerMapper
+    implementation('com.github.dozermapper:dozer-core:6.4.0')
 
     // Spring Developer Tools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
