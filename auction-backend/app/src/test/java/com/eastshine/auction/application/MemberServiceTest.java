@@ -159,7 +159,7 @@ class MemberServiceTest extends ServiceTest {
 
             @DisplayName("회원 상태를 탈퇴로 변경한다.")
             @Test
-            void it_modifies_member(){
+            void it_modifies_member_status(){
                 memberService.dropOutMember(dropoutRequest);
 
                 // 테스트를 위해 메소드의 리턴값을 만드는 것이 나을까?
