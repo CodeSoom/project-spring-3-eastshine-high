@@ -16,8 +16,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("")
-    public String signUpMember(@RequestBody @Valid MemberDto.Registration registration) {
-        Long memberId = memberService.signUpMember(registration);
+    public String signUpMember(@RequestBody @Valid MemberDto.Signup signupRequest) {
+        Long memberId = memberService.signUpMember(signupRequest);
         return null;
     }
 
