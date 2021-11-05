@@ -18,7 +18,7 @@ public class MemberService {
         this.mapper = mapper;
     }
 
-    public Long signUpMember(MemberDto.Signup signupRequest) {
+    public Member signUpMember(MemberDto.Signup signupRequest) {
         String email = signupRequest.getEmail();
         if(memberRepository.existsByEmail(email)){
             throw new InvalidParameterException("duplicate email");
@@ -27,6 +27,6 @@ public class MemberService {
         Member member = mapper.map(signupRequest, Member.class);
         Member savedMember = memberRepository.save(member);
 
-        return savedMember.getId();
+        return savedMember;
     }
 }

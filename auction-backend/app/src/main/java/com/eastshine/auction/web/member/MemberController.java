@@ -1,6 +1,7 @@
 package com.eastshine.auction.web.member;
 
 import com.eastshine.auction.application.MemberService;
+import com.eastshine.auction.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ public class MemberController {
 
     @PostMapping("")
     public String signUpMember(@RequestBody @Valid MemberDto.Signup signupRequest) {
-        Long memberId = memberService.signUpMember(signupRequest);
+        Member member = memberService.signUpMember(signupRequest);
         return null;
     }
 
