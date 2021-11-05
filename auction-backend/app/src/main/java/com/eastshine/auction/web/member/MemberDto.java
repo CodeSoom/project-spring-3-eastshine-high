@@ -9,7 +9,7 @@ public class MemberDto {
 
     @Getter
     @Builder
-    public static class Registration{
+    public static class Signup{
         @NotBlank
         private String email;
         @NotBlank

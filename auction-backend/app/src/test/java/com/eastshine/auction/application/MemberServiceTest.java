@@ -22,7 +22,6 @@ class MemberServiceTest extends ServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private MemberDto.Registration registeredMember;
     private static final String REGISTERED_EMAIL ="test@email.com";
     private final String PASSWORD ="1234";
 
@@ -32,7 +31,7 @@ class MemberServiceTest extends ServiceTest {
         memberService = new MemberService(memberRepository, mapper);
 
         memberService.signUpMember(
-                MemberDto.Registration.builder()
+                MemberDto.Signup.builder()
                 .email(REGISTERED_EMAIL)
                 .password(PASSWORD)
                 .build()
@@ -42,7 +41,7 @@ class MemberServiceTest extends ServiceTest {
     @Nested
     @DisplayName("회원 가입시에")
     class Describe_signUpMember {
-        private MemberDto.Registration requestRegistration;
+        private MemberDto.Signup signupRequest;
 
         @Nested
         @DisplayName("이메일이 중복된 경우")
@@ -50,7 +49,7 @@ class MemberServiceTest extends ServiceTest {
 
             @BeforeEach
             void setUp() {
-                requestRegistration = MemberDto.Registration.builder()
+                signupRequest = MemberDto.Signup.builder()
                         .email(REGISTERED_EMAIL)
                         .password("other_password")
                         .build();
@@ -59,7 +58,7 @@ class MemberServiceTest extends ServiceTest {
             @DisplayName("예외를 던진다.")
             @Test
             void it_throws_InvalidParameterException() {
-                assertThatThrownBy(() -> memberService.signUpMember(requestRegistration))
+                assertThatThrownBy(() -> memberService.signUpMember(signupRequest))
                         .isInstanceOf(InvalidParameterException.class);
             }
         }
