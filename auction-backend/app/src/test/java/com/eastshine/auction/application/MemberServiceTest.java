@@ -3,20 +3,16 @@ package com.eastshine.auction.application;
 import com.eastshine.auction.domain.member.Member;
 import com.eastshine.auction.domain.member.MemberRepository;
 import com.eastshine.auction.domain.member.MemberStatus;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Commit;
-
-import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Transactional
-@Commit
 class MemberServiceTest extends ServiceTest {
     private MemberService memberService;
 
@@ -28,7 +24,7 @@ class MemberServiceTest extends ServiceTest {
     private static Long REGISTERED_ID;
 
     @BeforeEach
-    void setUpAll() {
+    void setUpEach() {
         memberService = new MemberService(memberRepository);
 
         Member member = memberService.signUpMember(
@@ -38,6 +34,11 @@ class MemberServiceTest extends ServiceTest {
                         .build()
         );
         REGISTERED_ID = member.getId();
+    }
+
+    @AfterEach
+    void afterEach() {
+        memberRepository.deleteAll();
     }
 
     @Nested
@@ -65,7 +66,11 @@ class MemberServiceTest extends ServiceTest {
 
                 assertThat(signedUpMember.getEmail()).isEqualTo(otherEmail);
                 assertThat(signedUpMember.getPassword()).isEqualTo(PASSWORD);
+                assertThat(signedUpMember.getStatus()).isEqualTo(MemberStatus.SINGUP);
             }
+
+            // Todo 이메일 형식에 맞지 않는 것도 테스트하면 좋을 것 같다.
+            // 테스트에 대한 개인적 생각 : 이 어플리케이션이 어떻게 돌아가는 지에 대한 스케치이다.
         }
 
         @Nested
@@ -162,9 +167,11 @@ class MemberServiceTest extends ServiceTest {
             void it_modifies_member_status(){
                 memberService.dropOutMember(dropoutRequest);
 
-                // 테스트를 위해 메소드의 리턴값을 만드는 것이 나을까?
-                // 만들지 않는다면 다른 테스트할 수 있는 방법이 있을까?
-                //assertThat(dropedOutMember.getStatus()).isEqualTo(MemberStatus.DROPOUT);
+                Member member = memberRepository.findById(REGISTERED_ID).orElse(new Member());
+
+                assertThat(member.getId()).isEqualTo(REGISTERED_ID);
+                // Test 실패 Dirty check?? ㅜㅜ
+                assertThat(member.getStatus()).isEqualTo(MemberStatus.DROPOUT);
             }
         }
 

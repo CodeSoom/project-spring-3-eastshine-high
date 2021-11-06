@@ -6,7 +6,6 @@ import com.eastshine.auction.domain.member.MemberStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Service
 public class MemberService {
     private MemberRepository memberRepository;
@@ -22,10 +21,13 @@ public class MemberService {
      * @return 회원 가입된 정보.
      * @Throw IllegalArgumentException 회원 가입할 이메일 정보가 중복된 경우.
      */
+    @Transactional
     public Member signUpMember(Member requestSignup) {
         if(memberRepository.existsByEmail(requestSignup.getEmail())){
             throw new IllegalArgumentException("duplicate email");
         }
+
+        requestSignup.changeMemberStatus(MemberStatus.SINGUP);
 
         Member signedUpMember = memberRepository.save(requestSignup);
 
@@ -38,6 +40,7 @@ public class MemberService {
      * @param requestMod 회원 수정 요청 정보.
      * @return 수정된 회원 정보.
      */
+    @Transactional
     public Member modifyMember(Member requestMod) {
         Member member = this.getMember(requestMod.getId());
 
@@ -52,6 +55,7 @@ public class MemberService {
      *
      * @param requestDropout 회원 삭제 요청 정보.
      */
+    @Transactional
     public void dropOutMember(Member requestDropout) {
         Member member = getMember(requestDropout.getId());
 
@@ -65,7 +69,8 @@ public class MemberService {
      * @return 회원 엔티티.
      * @Throw IllegalArgumentException 식별자에 해당하는 엔티티를 찾을 수 없는 경우.
      */
-    private Member getMember(Long id) {
+    @Transactional(readOnly = true)
+    public Member getMember(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("아이디를 찾을 수 없습니다." + id));
     }

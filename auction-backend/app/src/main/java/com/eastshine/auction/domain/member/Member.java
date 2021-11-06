@@ -26,17 +26,15 @@ public class Member {
     private String email;
     private String password;
 
-    // Todo 현제 null 값이 입력되고 있다.
-    @Column(length = 32, columnDefinition = "varchar(32) default 'SINGUP'")
     @Enumerated(value = EnumType.STRING)
     private MemberStatus status;
 
     @Builder
-    // 테스트를 위해 생성자에 id를 추가 이 정도는 괜찮을까?
-    public Member(Long id, String email, String password) {
+    public Member(Long id, String email, String password, MemberStatus status) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.status = status;
     }
 
     public void modifyEmail(String email) {
